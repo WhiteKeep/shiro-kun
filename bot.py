@@ -18,7 +18,7 @@ categoryID = int(config.categoryID)
 prefix = str(config.prefix)
 helpName = str(config.helpName)
 helpData01 = str(config.helpData01)
-helpData02 = str(config.helpData02)
+#helpData02 = str(config.helpData02)
 
 
 @client.event
@@ -45,7 +45,7 @@ async def on_message(message):
 
     if mess == helpName:
         await message.channel.send(helpData01)
-        await message.channel.send(helpData02)
+        #await message.channel.send(helpData02)
 
     role_pio = client.get_guild(servId).get_role(roleId)
     whohaverole = message.author.roles
