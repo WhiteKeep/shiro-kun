@@ -3,19 +3,22 @@
 import discord
 
 
+import config
+
+
 client = discord.Client()
 
-DisToken = 'Njc4MjU0MzQ4NTk3MTk4ODkx.XkgfYA.XMI1uptK3qvQvxqDCaiByNSpmSQ'
-debug = False
-actData = 'Поймай хвост'
-servId = 677601119014354958
-roleId = 677605549478510614
-voiceID = 678249786859585537
-categoryID = 678251330040627228
-prefix = '!'
-helpName = 'help'
-helpData01 = 'Этот лисёнок могёт только повторять за Вожаком стаи<:fit:678235693616463882>'
-helpData02 = 'Для этого он должен просто написать перед своими словами `' + prefix + '`'
+DisToken = str(config.DisToken)
+debug = config.debug
+actData = str(config.actData)
+servId = config.servId
+roleId = config.roleId
+voiceID = config.voiceID
+categoryID = config.categoryID
+prefix = str(config.prefix)
+helpName = str(config.helpName)
+helpData01 = str(config.helpData01)
+helpData02 = str(config.helpData02)
 
 
 @client.event
@@ -57,8 +60,30 @@ async def on_message(message):
             else:
                 i = 0
         if t == len(prefix):
-            mtext = mess[len(prefix):]
-            await message.channel.send(mtext)
+
+            if mess[len(prefix):] == 'add':
+                if debug is True:
+                    print('embed add now')
+
+
+                #emb = discord.Embed(name = 'Pypis', color = 0x39d0d6)
+                #emb.add_field(name = 'Пиу ', value = 'пиу пиgggghughughughufghrufgughfu', inline = False)
+
+
+                
+
+
+
+
+
+                #await message.channel.send(embed=emb)
+            else:
+                mtext = mess[len(prefix):]
+                await message.channel.send(mtext)
+
+
+
+
 
 
 @client.event
@@ -75,6 +100,9 @@ async def on_voice_state_update(member, before, after):
     for channel in client.get_channel(voiceID).category.voice_channels:
         if(channel.id == voiceID or len(channel.members) != 0): continue
         await channel.delete(reason="В голосовой комнате 0 людей!")
+
+
+
 
 
 
