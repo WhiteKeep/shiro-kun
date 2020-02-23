@@ -9,12 +9,12 @@ import config
 client = discord.Client()
 
 DisToken = str(config.DisToken)
-debug = config.debug
+debug = bool(config.debug)
 actData = str(config.actData)
-servId = config.servId
-roleId = config.roleId
-voiceID = config.voiceID
-categoryID = config.categoryID
+servId = int(config.servId)
+roleId = int(config.roleId)
+voiceID = int(config.voiceID)
+categoryID = int(config.categoryID)
 prefix = str(config.prefix)
 helpName = str(config.helpName)
 helpData01 = str(config.helpData01)
