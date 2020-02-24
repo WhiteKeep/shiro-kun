@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import discord
+from discord import utils
 
 
 import config
@@ -103,7 +104,57 @@ async def on_voice_state_update(member, before, after):
 
 
 
+messageID = 681451205737971791
 
+@client.event
+async def on_raw_reaction_add(payload):
+    print('event')
+    message_id = payload.message_id
+    if message_id == messageID:
+        print('message indetifical')
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'fit':
+            role = discord.utils.get(guild.roles, name = 'Читатель')
+        elif payload.emoji.name == 'io':
+            role = discord.utils.get(guild.roles, name = 'Зритель')
+        
+        if role is not None:
+            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+            if member is not None:
+                await member.add_roles(role)
+                print('done')
+            else:
+                print('member not found')
+        else:
+            print('role not found')
+
+
+
+@client.event
+async def on_raw_reaction_remove(payload):
+    print('event')
+    message_id = payload.message_id
+    if message_id == messageID:
+        print('message indetifical')
+        guild_id = payload.guild_id
+        guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
+
+        if payload.emoji.name == 'fit':
+            role = discord.utils.get(guild.roles, name = 'Читатель')
+        elif payload.emoji.name == 'io':
+            role = discord.utils.get(guild.roles, name = 'Зритель')
+        
+        if role is not None:
+            member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+            if member is not None:
+                await member.remove_roles(role)
+                print('done')
+            else:
+                print('member not found')
+        else:
+            print('role not found')
 
 
 
