@@ -104,8 +104,8 @@ async def on_voice_state_update(member, before, after):
         
         
         
-messageID01 = 684478135189897242
-messageID02 = 684478310075596861
+messageID01 = 685103322683670537
+messageID02 = 685103723361468446
 
 @client.event
 async def on_raw_reaction_add(payload):
