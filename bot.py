@@ -4,7 +4,7 @@ import discord
 from discord import utils
 
 
-production = False
+production = True
 
 
 if production is not True:
