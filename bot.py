@@ -82,7 +82,6 @@ async def sd(ctx, *args):
             response += ' '
             x = x + 1
         await ctx.send(response)
-        await ctx.send(ctx.message.content[:])
         await ctx.message.delete()
 
 @client.command()
