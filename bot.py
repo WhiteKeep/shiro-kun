@@ -1,44 +1,27 @@
 # -*- coding: utf-8 -*-
 
+import os
 import discord
 from discord import utils
+from discord.ext import commands
 
 
-production = True
+prefix = '!'
+
+client = commands.Bot(command_prefix = prefix)
+
+client.remove_command('help')
 
 
-if production is not True:
-
-    import configer
-
-    DisToken = str(configer.DisToken)
-    debug = bool(configer.debug)
-    actData = str(configer.actData)
-    servId = int(configer.servId)
-    roleId = int(configer.roleId)
-    voiceID = int(configer.voiceID)
-    categoryID = int(configer.categoryID)
-    prefix = str(configer.prefix)
-    helpName = str(configer.helpName)
-    helpData01 = str(configer.helpData01)
-    #helpData02 = str(configer.helpData02)
-else:
-    import config
-
-    DisToken = str(config.DisToken)
-    debug = bool(config.debug)
-    actData = str(config.actData)
-    servId = int(config.servId)
-    roleId = int(config.roleId)
-    voiceID = int(config.voiceID)
-    categoryID = int(config.categoryID)
-    prefix = str(config.prefix)
-    helpName = str(config.helpName)
-    helpData01 = str(config.helpData01)
-    #helpData02 = str(config.helpData02)
-
-
-client = discord.Client()
+actdata = 'Поймай хвост'
+token = os.environ.get('DisToken')
+debug = True
+prefix = '!'
+roleid = 677605549478510614
+categoryid = 678251330040627228
+voiceid = 678249786859585537
+partroleid = 695628636971204700
+partrolecanid = 696422735135375530
 
 
 @client.event
@@ -46,82 +29,117 @@ async def on_ready():
 
     await client.change_presence(
         activity=discord.Activity(
-            name=actData, 
+            name=actdata, 
             type=discord.ActivityType.playing
             )
         )
 
     print('logged on as {0.user}!'.format(client))
 
-
-
 @client.event
 async def on_message(message):
+
 
     if debug is True:
         print('Message from {0.author}: {0.content}'.format(message))
 
-    mess = message.content[:]
+    await client.process_commands(message)
 
-    if mess == helpName:
-        await message.channel.send(helpData01 + '`' + prefix + '`')
-        #await message.channel.send(helpData02)
+@client.command()
+async def help(ctx):
+    await ctx.send('**Команды бота** \n *Для выполнения команды необходимо перед её названием поставить* `' + prefix + '` \n :gear: *В разработке* :gear:')
+    
+    role_q = client.get_guild(ctx.guild.id).get_role(roleid)
+    role_w = client.get_guild(ctx.guild.id).get_role(partrolecanid)
+    haverole = ctx.author.roles
+    if role_q in haverole:
+        await ctx.author.send('**А для тебя есть ещё дополнительные команды :3** \n *Для выполнения команды необходимо перед её названием поставить* `' + prefix + '` \n `s` Бот повторит за тобой \n `sd` Бот тоже повторит за тобой, но теперь уже удалит исходное сообщение \n `partner @user` при использовании этой команды, вы объявляете о сотрудничестве. @user - это пользователь, с которым вы будете сотрудничать')
+    elif role_w in haverole:
+        await ctx.author.send('**А для тебя есть ещё дополнительные команды :3** \n *Для выполнения команды необходимо перед её названием поставить* `' + prefix + '` \n `partner @user` при использовании этой команды, вы объявляете о сотрудничестве. @user - это пользователь, с которым вы будете сотрудничать')
 
-    role_pio = client.get_guild(servId).get_role(roleId)
-    whohaverole = message.author.roles
+@client.command()
+async def s(ctx, *args):
+    role_pio = client.get_guild(ctx.guild.id).get_role(roleid)
+    whohaverole = ctx.author.roles
     if role_pio in whohaverole:
-        i = 0
-        i = len(prefix)
-        t = 0
-        while i > 0:
-            if mess[t] == prefix[t]:
-                i = i - 1
-                t = t + 1
-            else:
-                i = 0
-        if t == len(prefix):
+        x = 0
+        response = ''
+        while x < len(args):
+            response += args[x]
+            response += ' '
+            x = x + 1
+        await ctx.send(response)
 
-            mtext = mess[len(prefix):]
-            await message.channel.send(mtext)
+@client.command()
+async def sd(ctx, *args):
+    role_pio = client.get_guild(ctx.guild.id).get_role(roleid)
+    whohaverole = ctx.author.roles
+    if role_pio in whohaverole:
+        x = 0
+        response = ''
+        while x < len(args):
+            response += args[x]
+            response += ' '
+            x = x + 1
+        await ctx.send(response)
+        await ctx.send(ctx.message.content[:])
+        await ctx.message.delete()
 
-
-
+@client.command()
+async def partner(ctx):
+    role_q = client.get_guild(ctx.guild.id).get_role(roleid)
+    role_w = client.get_guild(ctx.guild.id).get_role(partrolecanid)
+    haverole = ctx.author.roles
+    if role_q in haverole or role_w in haverole:
+        role = discord.utils.get(ctx.guild.roles, id = partroleid)
+        cont = ctx.message.content[:]
+        conts = cont.split('<@!')
+        partid = conts[1][:len(conts[1]) - 1]
+        partid = int(partid)
+        partner = discord.utils.find(lambda m : m.id == partid, ctx.guild.members)
+        await partner.add_roles(role)
+        await ctx.message.add_reaction('✅')
+        await ctx.message.add_reaction('🤝')
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    if(member.bot):return
-    if(after.channel and after.channel.category.id == categoryID and after.channel.id == voiceID):
 
-        voiceChannel = await member.guild.create_voice_channel(f"SHIRO ┇ {member.name}", overwrites={
-            member: discord.PermissionOverwrite(
-                connect=True, speak=True, move_members=True, manage_channels=True, manage_roles=True, use_voice_activation=True)
-        }, category=after.channel.category, reason="Голосовая комната.")
+    if(member.bot):
+        return
+
+    if(after.channel and after.channel.category.id == categoryid and after.channel.id == voiceid):
+
+        voiceChannel = await member.guild.create_voice_channel(
+            f"SHIRO ┇ {member.name}", 
+            overwrites={
+                member: discord.PermissionOverwrite(connect=True, speak=True, move_members=True, manage_channels=True, manage_roles=True, use_voice_activation=True)
+                }, 
+            category=after.channel.category, 
+            reason="Голосовая комната."
+        )
 
         await member.edit(voice_channel=voiceChannel, reason="Перенос участника в его голосовую комнату.")
-    for channel in client.get_channel(voiceID).category.voice_channels:
-        if(channel.id == voiceID or len(channel.members) != 0): continue
+
+    for channel in client.get_channel(voiceid).category.voice_channels:
+
+        if(channel.id == voiceid or len(channel.members) != 0): continue
         await channel.delete(reason="В голосовой комнате 0 людей!")
-        
-        
-        
+
 messageID01 = 685103322683670537
 messageID02 = 685103723361468446
 messageID03 = 696789901911392347
 
 @client.event
 async def on_raw_reaction_add(payload):
-    print('event')
     message_id = payload.message_id
     
     if message_id == messageID01:
-        print('message indetifical01')
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
         
         role = None
 
         if payload.emoji.name == 'book4':
-            print('ok')
             role = discord.utils.get(guild.roles, name = 'Читатель')
         elif payload.emoji.name == 'tv4':
             role = discord.utils.get(guild.roles, name = 'Зритель')
@@ -130,15 +148,9 @@ async def on_raw_reaction_add(payload):
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.add_roles(role)
-                print('done')
-            else:
-                print('member not found')
-        else:
-            print('role not found')
             
             
     if message_id == messageID02:
-        print('message indetifical02')
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
         
@@ -153,15 +165,9 @@ async def on_raw_reaction_add(payload):
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.add_roles(role)
-                print('done')
-            else:
-                print('member not found')
-        else:
-            print('role not found')
 
 
     if message_id == messageID03:
-        print('message indetifical03')
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
         
@@ -174,30 +180,18 @@ async def on_raw_reaction_add(payload):
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.add_roles(role)
-                print('done')
-            else:
-                print('member not found')
-        else:
-            print('role not found')
 
-            
-            
-            
-            
 @client.event
 async def on_raw_reaction_remove(payload):
-    print('event')
     message_id = payload.message_id
     
     if message_id == messageID01:
-        print('message indetifical01')
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
         
         role = None
 
         if payload.emoji.name == 'book4':
-            print('ok')
             role = discord.utils.get(guild.roles, name = 'Читатель')
         elif payload.emoji.name == 'tv4':
             role = discord.utils.get(guild.roles, name = 'Зритель')
@@ -206,15 +200,9 @@ async def on_raw_reaction_remove(payload):
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.remove_roles(role)
-                print('done')
-            else:
-                print('member not found')
-        else:
-            print('role not found')
             
             
     if message_id == messageID02:
-        print('message indetifical02')
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
         
@@ -229,15 +217,9 @@ async def on_raw_reaction_remove(payload):
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.remove_roles(role)
-                print('done')
-            else:
-                print('member not found')
-        else:
-            print('role not found')
             
             
     if message_id == messageID03:
-        print('message indetifical03')
         guild_id = payload.guild_id
         guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
         
@@ -249,11 +231,9 @@ async def on_raw_reaction_remove(payload):
             member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
             if member is not None:
                 await member.remove_roles(role)
-                print('done')
-            else:
-                print('member not found')
-        else:
-            print('role not found')
 
 
-client.run(DisToken)
+
+
+
+client.run(token)
