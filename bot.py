@@ -59,9 +59,10 @@ async def help(ctx):
 
 @client.command()
 async def s(ctx, *args):
-    role_pio = client.get_guild(ctx.guild.id).get_role(roleid)
-    whohaverole = ctx.author.roles
-    if role_pio in whohaverole:
+    role_q = client.get_guild(ctx.guild.id).get_role(roleid)
+    role_w = client.get_guild(ctx.guild.id).get_role(partrolecanid)
+    haverole = ctx.author.roles
+    if role_q in haverole or role_w in haverole:
         x = 0
         response = ''
         while x < len(args):
@@ -72,9 +73,10 @@ async def s(ctx, *args):
 
 @client.command()
 async def sd(ctx, *args):
-    role_pio = client.get_guild(ctx.guild.id).get_role(roleid)
-    whohaverole = ctx.author.roles
-    if role_pio in whohaverole:
+    role_q = client.get_guild(ctx.guild.id).get_role(roleid)
+    role_w = client.get_guild(ctx.guild.id).get_role(partrolecanid)
+    haverole = ctx.author.roles
+    if role_q in haverole or role_w in haverole:
         x = 0
         response = ''
         while x < len(args):
