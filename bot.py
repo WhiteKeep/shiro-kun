@@ -61,12 +61,8 @@ async def s(ctx, *args):
     role_w = client.get_guild(ctx.guild.id).get_role(partrolecanid)
     haverole = ctx.author.roles
     if role_q in haverole or role_w in haverole:
-        x = 0
-        response = ''
-        while x < len(args):
-            response += args[x]
-            response += ' '
-            x = x + 1
+        lens = len(prefix) + len('s') + len(' ')
+        response = ctx.message.content[lens:]
         await ctx.send(response)
 
 @client.command()
@@ -75,12 +71,8 @@ async def sd(ctx, *args):
     role_w = client.get_guild(ctx.guild.id).get_role(partrolecanid)
     haverole = ctx.author.roles
     if role_q in haverole or role_w in haverole:
-        x = 0
-        response = ''
-        while x < len(args):
-            response += args[x]
-            response += ' '
-            x = x + 1
+        lens = len(prefix) + len('sd') + len(' ')
+        response = ctx.message.content[lens:]
         await ctx.send(response)
         await ctx.message.delete()
 
