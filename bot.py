@@ -52,10 +52,8 @@ async def help(ctx):
     role_q = client.get_guild(ctx.guild.id).get_role(roleid)
     role_w = client.get_guild(ctx.guild.id).get_role(partrolecanid)
     haverole = ctx.author.roles
-    if role_q in haverole:
+    if role_q in haverole or role_w in haverole:
         await ctx.author.send('**А для тебя есть ещё дополнительные команды :3** \n *Для выполнения команды необходимо перед её названием поставить* `' + prefix + '` \n `s` Бот повторит за тобой \n `sd` Бот тоже повторит за тобой, но теперь уже удалит исходное сообщение \n `partner @user` при использовании этой команды, вы объявляете о сотрудничестве. @user - это пользователь, с которым вы будете сотрудничать')
-    elif role_w in haverole:
-        await ctx.author.send('**А для тебя есть ещё дополнительные команды :3** \n *Для выполнения команды необходимо перед её названием поставить* `' + prefix + '` \n `partner @user` при использовании этой команды, вы объявляете о сотрудничестве. @user - это пользователь, с которым вы будете сотрудничать')
 
 @client.command()
 async def s(ctx, *args):
