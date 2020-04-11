@@ -91,7 +91,14 @@ async def partner(ctx):
         await partner.add_roles(role)
         await ctx.message.add_reaction('✅')
         await ctx.message.add_reaction('🤝')
+        
+        
+@client.command()
+async def status(ctx):
+    botping = round(client.latency * 1000)
+    await ctx.send('Состаяние бота: работает исправно :white_check_mark: \n Задержка интернет соеденения:' + str(botping) + ' ms')
 
+        
 @client.event
 async def on_voice_state_update(member, before, after):
 
