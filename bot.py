@@ -22,6 +22,8 @@ categoryid = 678251330040627228
 voiceid = 678249786859585537
 partroleid = 695628636971204700
 partrolecanid = 696422735135375530
+bumpbot = 315926021457051650
+messbumpbot = 'Pong!'
 
 
 @client.event
@@ -39,9 +41,8 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
-
-    if debug is True:
-        print('Message from {0.author}: {0.content}'.format(message))
+    if message.author.id == bumpbot and message.content[:] == messbumpbot:
+        await message.delete()
 
     await client.process_commands(message)
 
@@ -91,14 +92,12 @@ async def partner(ctx):
         await partner.add_roles(role)
         await ctx.message.add_reaction('✅')
         await ctx.message.add_reaction('🤝')
-        
-        
-@client.command()
-async def status(ctx):
-    botping = round(client.latency * 1000)
-    await ctx.send('Состаяние бота: работает исправно :white_check_mark: \n Задержка интернет соеденения:' + str(botping) + ' ms')
 
-        
+@client.command()
+async def ping(ctx):
+    botping = round(client.latency * 1000)
+    await ctx.send('Состаяние бота: работает исправно :white_check_mark: \nЗадержка интернет соеденения:' + str(botping) + ' ms')
+
 @client.event
 async def on_voice_state_update(member, before, after):
 
