@@ -103,6 +103,19 @@ async def ping(ctx):
     botping = round(client.latency * 1000)
     await ctx.send('Состаяние бота: работает исправно :white_check_mark: \nЗадержка интернет соеденения:' + str(botping) + ' ms')
 
+#execute command
+@client.command()
+async def execute(ctx):
+    role_q = client.get_guild(ctx.guild.id).get_role(roleid)
+    haverole = ctx.author.roles
+    if role_q in haverole:
+        if 'os' in ctx.message.content[:] or 'token' in ctx.message.content[:]:
+            await ctx.send('Данная инструкция не может быть выполнена, так как она может повлиять на работоспособность бота')
+            await ctx.message.add_reaction('⛔')
+        else:
+            eval(ctx.message.content[:], globals=None, locals=None)
+            await ctx.add_reaction('✅')
+
 #edit message command(not work in production)
 '''
 @client.command()
