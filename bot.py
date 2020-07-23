@@ -104,6 +104,7 @@ async def ping(ctx):
     await ctx.send('Состаяние бота: работает исправно :white_check_mark: \nЗадержка интернет соеденения:' + str(botping) + ' ms')
 
 #execute command
+'''
 @client.command()
 async def execute(ctx):
     role_q = client.get_guild(ctx.guild.id).get_role(roleid)
@@ -115,7 +116,7 @@ async def execute(ctx):
         else:
             eval(ctx.message.content[:], globals=None, locals=None)
             await ctx.add_reaction('✅')
-
+'''
 #edit message command(not work in production)
 '''
 @client.command()
