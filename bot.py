@@ -127,7 +127,7 @@ async def ed(ctx):
 
     await message.edit(ctx.message.content)
 '''
-@client.event
+@client.command()
 async def wiki(ctx, *, args):
     try:
         wikipedia.set_lang("ru")
