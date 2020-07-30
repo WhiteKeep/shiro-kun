@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 #add lib here
 import os
+#import json
+import wikipedia
 import discord
 from discord import utils
 from discord.ext import commands
@@ -125,6 +127,18 @@ async def ed(ctx):
 
     await message.edit(ctx.message.content)
 '''
+@client.event
+async def wiki(ctx, *, args):
+    try:
+        wikipedia.set_lang("ru")
+        new_page = wikipedia.page(f'{args}')
+        summ = wikipedia.summary(f'{args}', sentences=5)
+        embed = discord.Embed(title=new_page.title, description=f"{summ}", color=0xc582ff)
+        embed.add_field(name="Для полного ознакомления со статьей, перейдите по ссылке:", value=f"[M]({new_page.url})")
+        await ctx.send(embed=embed)
+    except Exception:
+        return await ctx.send('Неоднозначный аргумент, уточните статью', delete_after=10)
+
 
 #private room code
 #-------------begin---------------
