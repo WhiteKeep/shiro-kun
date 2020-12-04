@@ -2,3 +2,4 @@ notes/
 old/
 .vscode/
 exp/
+.env
