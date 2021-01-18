@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #add lib here
 import os
 #import json
@@ -13,7 +12,7 @@ if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
 
-prefix = '!'                                    #var for prefix
+prefix = '!'                                    #command prefix
 
 client = commands.Bot(command_prefix = prefix)  #add prefix
 
@@ -50,7 +49,7 @@ async def on_message(message):
     if message.author.id == bumpbot and message.content[:] == messbumpbot:
         await message.delete()
 
-    #send message content for check if it command
+    #send to command function
     await client.process_commands(message)
 
 #help command
